@@ -17,4 +17,18 @@
             <p>{{ post.content|safe }}</p>
         </div>
     </div>
+    <h2>Comentários:</h2>
+    <ul>
+        {% for comment in comments %}
+            <li>{{ comment.text }} - {{ comment.author }} - {{ comment.created_date|date }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Adicionar Comentário:</h2>
+    <form method="post" action="{% url 'add_comment' pk=post.pk %}">
+        {% csrf_token %}
+        {{ comment_form.as_p }}
+        <button type="submit">Adicionar Comentário</button>
+    </form>
+    <a href="{% url 'post_list' %}">Voltar para a lista de posts</a>
 {% endblock %}

@@ -1,8 +1,9 @@
-from .models import Post
-from .forms import PostForm
-from django.shortcuts import render
+from .models import Post, Comment
+from .forms import PostForm, CommentForm
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+from django.utils import timezone
 
 class PostListView(ListView):
     model = Post
@@ -13,6 +14,12 @@ class PostDetailView(DetailView):
     model = Post
     template_name = 'noticias/post_detail.html'
     context_object_name = 'post'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['comments'] = Comment.objects.filter(post=self.object).order_by('-created_date')
+        context['comment_form'] = CommentForm()
+        return context
 
 class PostCreateView(CreateView):
     model = Post
@@ -33,3 +40,18 @@ class PostDeleteView(DeleteView):
 
 def home(request):
     return render(request, 'noticias/home.html')
+
+class CommentCreateView(CreateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = 'noticias/comment_form.html'
+
+    def form_valid(self, form):
+        form.instance.post = get_object_or_404(Post, pk=self.kwargs['pk'])
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('post_detail', kwargs={'pk': self.kwargs['pk']})
+
+add_comment = CommentCreateView.as_view()
