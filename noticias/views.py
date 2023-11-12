@@ -8,7 +8,7 @@ def home(request):
     return render(request, 'noticias/home.html')
 
 def post_list(request):
-    posts = Post.objects.all()
+    posts = Post.objects.order_by('-published_date')
     return render(request, 'noticias/post_list.html', {'posts': posts})
 
 def post_detail(request, pk):
@@ -17,12 +17,15 @@ def post_detail(request, pk):
 
 def post_create(request):
     if request.method == 'POST':
-        Post.objects.create(
-            titulo=request.POST['titulo'],
-            conteudo=request.POST['conteudo']
-        )
-        return redirect('post_list')
-    return render(request, 'noticias/post_form.html')
+        form = PostForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.image = form.cleaned_data['image']
+            post.save()
+            return redirect('post_list')
+    else:
+        form = PostForm()
+    return render(request, 'noticias/post_form.html', {'form': form})
 
 def post_edit(request, pk):
     post = get_object_or_404(Post, pk=pk)

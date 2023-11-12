@@ -9,7 +9,9 @@
             {% for post in posts %}
                 <li>
                     <h3><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h3>
-                    <p>{{ post.published_date|date }}</p>
+                    {% with formatted_date=post.published_date|date %}
+                        <p>Data de publicação: {{ formatted_date }}</p>
+                    {% endwith %}
                 </li>
             {% endfor %}
         </ul>
