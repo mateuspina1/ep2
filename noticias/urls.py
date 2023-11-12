@@ -1,8 +1,5 @@
 from django.urls import path
-from .views import home, post_list, post_detail, post_create, post_edit, post_delete, post_new
-from .views import PostListView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView
-from django.conf import settings
-from django.conf.urls.static import static
+from .views import home, PostListView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView
 
 urlpatterns = [
     path('posts/', PostListView.as_view(), name='post_list'),
@@ -12,6 +9,3 @@ urlpatterns = [
     path('<int:pk>/delete/', PostDeleteView.as_view(), name='post_delete'),
     path('', home, name='home'),
 ]
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
