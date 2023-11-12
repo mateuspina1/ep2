@@ -3,10 +3,18 @@
 {% block title %}{{ post.title }}{% endblock %}
 
 {% block content %}
-<h1>{{ post.title }}</h1>
-<p>{{ post.published_date|date }}</p>
-<p>{{ post.content }}</p>
-{% if post.image %}
-    <img src="{{ post.image }}" alt="{{ post.title }}">
-{% endif %}
+    <h1 class="post-title">{{ post.title }}</h1>
+    <p class="post-data">{{ post.published_date|date }}</p>
+
+    <div class="post-content">
+        {% if post.image %}
+            <div class="post-image">
+                <img src="{{ post.image }}" alt="{{ post.title }}">
+            </div>
+        {% endif %}
+
+        <div class="post-text">
+            <p>{{ post.content|safe }}</p>
+        </div>
+    </div>
 {% endblock %}

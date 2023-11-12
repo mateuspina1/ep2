@@ -1,0 +1,14 @@
+{% extends 'noticias/base.html' %}
+
+{% block title %}Confirmar Exclusão{% endblock %}
+
+{% block content %}
+    <h2>Confirmar Exclusão</h2>
+    <p>Você tem certeza que deseja excluir o post "{{ post.title }}"?</p>
+    <form method="post" action="{% url 'post_delete' pk=post.pk %}">
+        {% csrf_token %}
+        <input type="hidden" name="post_id" value="{{ post.pk }}">
+        <button type="submit">Sim, Excluir</button>
+    </form>
+    <a href="{% url 'post_detail' pk=post.pk %}">Cancelar</a>
+{% endblock %}
