@@ -1,0 +1,19 @@
+{% extends 'noticias/base.html' %}
+
+{% block title %}Lista de Categorias{% endblock %}
+
+{% block content %}
+    <h2>Lista de Categorias</h2>
+    {% if categories %}
+        <ul>
+            {% for category in categories %}
+                <li>
+                    <h3><a href="{% url 'category_detail' pk=category.pk %}">{{ category.name }}</a></h3>
+                    <p>{{ category.description }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Nenhuma categoria disponível.</p>
+    {% endif %}
+{% endblock %}

@@ -1,9 +1,8 @@
-from .models import Post, Comment
+from .models import Post, Comment, Category
 from .forms import PostForm, CommentForm
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from django.utils import timezone
 
 class PostListView(ListView):
     model = Post
@@ -55,3 +54,22 @@ class CommentCreateView(CreateView):
         return reverse_lazy('post_detail', kwargs={'pk': self.kwargs['pk']})
 
 add_comment = CommentCreateView.as_view()
+
+class CategoryListView(ListView):
+    model = Category
+    template_name = 'noticias/category_list.html'
+    context_object_name = 'categories'
+
+class CategoryDetailView(ListView):
+    model = Post
+    template_name = 'noticias/category_detail.html'
+    context_object_name = 'posts'
+
+    def get_queryset(self):
+        category = get_object_or_404(Category, pk=self.kwargs['pk'])
+        return Post.objects.filter(categories__in=[category])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['category'] = get_object_or_404(Category, pk=self.kwargs['pk'])
+        return context

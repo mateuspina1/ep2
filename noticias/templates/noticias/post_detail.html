@@ -17,6 +17,11 @@
             <p>{{ post.content|safe }}</p>
         </div>
     </div>
+    <p>Categorias: 
+        {% for category in post.categories.all %}
+            <a href="{% url 'category_detail' pk=category.pk %}">{{ category.name }}</a>{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+    </p>
     <h2>Comentários:</h2>
     <ul>
         {% for comment in comments %}

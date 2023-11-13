@@ -1,9 +1,12 @@
 {% extends 'noticias/base.html' %}
 
-{% block title %}Lista de Posts{% endblock %}
+{% block title %}{{ category.name }}{% endblock %}
 
 {% block content %}
-    <h2>Lista de Posts</h2>
+    <h1>{{ category.name }}</h1>
+    <p>{{ category.description }}</p>
+    
+    <h2>Posts nesta Categoria</h2>
     {% if posts %}
         <ul>
             {% for post in posts %}
@@ -17,6 +20,6 @@
             {% endfor %}
         </ul>
     {% else %}
-        <p>Nenhum post disponível.</p>
+        <p>Nenhum post nesta categoria.</p>
     {% endif %}
 {% endblock %}
